@@ -1,0 +1,16 @@
+<div id="gitment-container" class="container"></div>
+<link rel="stylesheet" href="css/gitment.css?v=0.0.0"><script src="js/gitment.browser.js?v=0.0.0"></script>
+<script>
+    const gitment = new GitmentBrowser({
+        id: '1504603383000', // optional
+        owner: 'ansvver',
+        repo: 'ansvver.github.io',
+        oauth: {
+            client_id: 'd83ac015fb516c998b72',
+            client_secret: 'd18e99d572502728f4509ae4ddd16db173b39a3d',
+        },
+        // ...
+        // For more available options, check out the documentation below
+    })
+    gitment.render('gitment-container')
+</script>

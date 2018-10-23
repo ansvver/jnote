@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -x
+
+CURR_DIR=`cd $(dirname $0); pwd`
+CORE=$CURR_DIR/core
+POSTS=$CURR_DIR/source/_posts
+PUB=$CURR_DIR/public
+
+cd $CURR_DIR
+pyenv local anaconda3 || true
+
+function _init() {
+  cd $PUB
+  rm *.html || true
+  rm -r img || true
+  rm -r css || true
+  rm -r js || true
+  rm favicon.ico || true
+  rm robots.txt || true
+  rm custom.css || true
+
+  cd $POSTS
+  cp -r img $PUB || true
+
+
+  cd $POSTS/../
+  cp -r css $PUB || true
+  cp -r js $PUB || true
+  cp favicon.ico $PUB || true
+  cp robots.txt $PUB || true
+  cp custom.css $PUB || true
+}
+
+function _genHomePage() {
+  python3 $CORE/pages.py home
+}
+
+function _addComment() {
+  python3 $CORE/pages.py comment
+}
+
+function _genPosts() {
+  cd $POSTS
+  jupyter nbconvert --output-dir $PUB --to html *.ipynb
+}
+
+function generate() {
+  echo "generate()"
+  _init
+  _genPosts
+  _addComment
+  _genHomePage
+}
+
+function echoUsage() {
+  echo "Usage $0 [-g|generate]"
+}
+
+case "$1" in
+  -g|generate)
+    generate
+    echo "generate done"
+    ;;
+  *)
+    echoUsage
+    exit 1
+    ;;
+esac
